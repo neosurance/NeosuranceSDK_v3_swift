@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NSR_SDK_v3_swift"
-  spec.version      = "3.0.0"
+  spec.version      = "3.0.1"
   spec.summary      = "A short description of NSR_SDK_v3_swift."
 
   # This description is used to generate tags and improve search results.
@@ -68,7 +68,7 @@ Neosurance SDK - Collects info from device sensors and from the hosting app - Ex
   # spec.platform     = :ios, "5.0"
 
   #  When using multiple platforms
-  # spec.ios.deployment_target = "5.0"
+  spec.ios.deployment_target = "12.0"
   # spec.osx.deployment_target = "10.7"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
@@ -80,7 +80,7 @@ Neosurance SDK - Collects info from device sensors and from the hosting app - Ex
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/neosurance/NeosuranceSDK_v3_swift.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/neosurance/NeosuranceSDK_v3_swift.git", :tag => spec.version.to_s }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -91,7 +91,7 @@ Neosurance SDK - Collects info from device sensors and from the hosting app - Ex
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "./Classes/**/*"
+  #spec.source_files  = "./Classes/*.*"
   #spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
@@ -106,10 +106,14 @@ Neosurance SDK - Collects info from device sensors and from the hosting app - Ex
   #
 
   # spec.resource  = "icon.png"
-  spec.resources = "./Assets/*.*"
+  #spec.resources = "./Assets/*.*"
 
   # spec.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
+  spec.source_files = 'Classes/**/*'
+  spec.resource_bundles = {
+      'NSR' => ['Assets/*.*']
+  }
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
