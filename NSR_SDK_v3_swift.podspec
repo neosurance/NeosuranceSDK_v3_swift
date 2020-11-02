@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NSR_SDK_v3_swift"
-  spec.version      = "3.0.1"
+  spec.version      = "3.0.2"
   spec.summary      = "A short description of NSR_SDK_v3_swift."
 
   # This description is used to generate tags and improve search results.
@@ -110,7 +110,8 @@ Neosurance SDK - Collects info from device sensors and from the hosting app - Ex
 
   # spec.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
-  spec.source_files = 'Classes/**/*'
+  spec.swift_version = '5.2'
+  spec.source_files = 'Classes/*.swift'
   spec.resource_bundles = {
       'NSR' => ['Assets/*.*']
   }
