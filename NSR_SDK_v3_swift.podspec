@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NSR_SDK_v3_swift"
-  spec.version      = "3.0.3"
+  spec.version      = "3.0.4"
   spec.summary      = "A short description of NSR_SDK_v3_swift."
 
   # This description is used to generate tags and improve search results.
