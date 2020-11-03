@@ -8,11 +8,9 @@
 import UIKit
 import WebKit
 
-
-
-class NSRDefaultSecurityDelegate: NSObject, NSRSecurityDelegate{
+public class NSRDefaultSecurityDelegate: NSObject, NSRSecurityDelegate{
     
-    func secureRequest(endpoint: String, payload: NSDictionary, headers: NSDictionary, completionHandler: @escaping (NSDictionary, NSError?) -> ()) {
+    public func secureRequest(endpoint: String, payload: NSDictionary, headers: NSDictionary, completionHandler: @escaping (NSDictionary, NSError?) -> ()) {
         
         print("NSRDefaultSecurityDelegate --> secureRequest --> endpoint: " + endpoint)
         
@@ -25,7 +23,7 @@ class NSRDefaultSecurityDelegate: NSObject, NSRSecurityDelegate{
         
     }
     
-    func callApi(payload:Dictionary<String,Any>, url:String, method:String, headers:NSDictionary, completionHandler: @escaping (NSDictionary, NSError?)->()) {
+    public func callApi(payload:Dictionary<String,Any>, url:String, method:String, headers:NSDictionary, completionHandler: @escaping (NSDictionary, NSError?)->()) {
         
         let urlTmp = url.replacingOccurrences(of: " ", with: "%20")
         let urlObj = URL(string: urlTmp)!

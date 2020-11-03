@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import CoreLocation
 
-class NSREventWebView: NSObject, WKScriptMessageHandler{
+public class NSREventWebView: NSObject, WKScriptMessageHandler{
     
     var webView: WKWebView!
     var webConfiguration: WKWebViewConfiguration!
@@ -49,7 +49,7 @@ class NSREventWebView: NSObject, WKScriptMessageHandler{
     }
 
     
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         do {
             
@@ -261,15 +261,15 @@ class NSREventWebView: NSObject, WKScriptMessageHandler{
         
     }
     
-    func synch(){
+    public func synch(){
         self.eval(javascript: "EVC.synch()")
     }
 
-    func reset(){
+    public func reset(){
         self.eval(javascript: "localStorage.clear();EVC.synch()")
     }
 
-    func crunchEvent(event: String, payload: NSDictionary){
+    public func crunchEvent(event: String, payload: NSDictionary){
         
         let nsr = NSR.getSharedInstance()
         
@@ -283,7 +283,7 @@ class NSREventWebView: NSObject, WKScriptMessageHandler{
         
     }
 
-    func eval(javascript: String){
+    public func eval(javascript: String){
         
         DispatchQueue.main.async{
             if(self.webView != nil){
@@ -295,7 +295,7 @@ class NSREventWebView: NSObject, WKScriptMessageHandler{
         
     }
 
-    func close(){
+    public func close(){
         if(self.webView != nil){
             self.webView.stopLoading()
             self.webView.navigationDelegate = nil

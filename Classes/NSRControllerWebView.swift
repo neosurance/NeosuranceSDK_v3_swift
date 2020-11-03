@@ -9,7 +9,7 @@ import Foundation
 import WebKit
 import CoreLocation
 
-class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,WKScriptMessageHandler,CLLocationManagerDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate{
+public class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,WKScriptMessageHandler,CLLocationManagerDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate{
     
     var webView: NSRWebView!
     var webConfiguration: WKWebViewConfiguration!
@@ -19,13 +19,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
     var locationCallBack: String!
     var photoCallBack: String!
     
-    override func loadView() {
-        
-        /*
-        DispatchQueue.main.async{
-            
-        }
-        */
+    override public func loadView() {
         
         super.loadView()
             
@@ -54,12 +48,12 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
         
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
     }
     
-    func navigate(url: String?){
+    public func navigate(url: String?){
         
         if(url != nil){
             let urlTmp = url!
@@ -72,13 +66,13 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
         
     }
     
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         print("NSRControllerWebView - userContentController")
         
         let body = message.body as! NSDictionary
         
-        let nsr = NSR.getSharedInstance() 
+        let nsr = NSR.getSharedInstance()
         
         
         if(body["log"] != nil) {
@@ -285,7 +279,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
             }
             
             if(nsr.workflowDelegate != nil && WHAT == "keepAlive") {
-                nsr.workflowDelegate.keepAlive()                
+                nsr.workflowDelegate.keepAlive()
             }
             
         }
@@ -293,7 +287,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
     }
     
     
-    func checkBody(){
+    public func checkBody(){
         
         self.webView.evaluateJavaScript("document.body.className", completionHandler: { result, error in
             
@@ -332,7 +326,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
     }
     
     
-    func close(){
+    public func close(){
         
         print(#function)
         
@@ -357,7 +351,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
         
     }
     
-    func getLocation(callBack: String) {
+    public func getLocation(callBack: String) {
         
         if(self.locationManager == nil){
             self.locationManager = CLLocationManager()
@@ -375,7 +369,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
     }
 
     
-    func didUpdateLocations(manager: CLLocationManager, locations: NSArray){
+    public func didUpdateLocations(manager: CLLocationManager, locations: NSArray){
         
         if(locations.count > 0){
             
@@ -403,11 +397,11 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
         
     }
     
-    func didFailWithError(manager: CLLocationManager, error: NSError){
+    public func didFailWithError(manager: CLLocationManager, error: NSError){
         print("didFailWithError")
     }
     
-    func eval(javascript: String){
+    public func eval(javascript: String){
         
         DispatchQueue.main.async {
             if(self.webView != nil){
@@ -421,7 +415,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
     
     /* *** PHOTO *** */
     
-    func takePhoto(callBack: String){
+    public func takePhoto(callBack: String){
         let controller = UIImagePickerController()
         controller.delegate = self
         controller.sourceType = .camera
@@ -432,7 +426,7 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
         })
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
                 
         if(self.photoCallBack != nil){
         
@@ -462,26 +456,26 @@ class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDelegate,W
             
     }
     
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: {
             self.photoCallBack = nil
         })
     }
         
     
-    func shouldAutorotate()->Bool{
+    public func shouldAutorotate()->Bool{
         return false
     }
 
-    func preferredInterfaceOrientationForPresentation()->UIInterfaceOrientation{
+    public func preferredInterfaceOrientationForPresentation()->UIInterfaceOrientation{
         return .portrait
     }
 
-    func supportedInterfaceOrientations()->UIInterfaceOrientationMask{
+    public func supportedInterfaceOrientations()->UIInterfaceOrientationMask{
         return .portrait
     }
 
-    func preferredStatusBarStyle()->UIStatusBarStyle{
+    public func preferredStatusBarStyle()->UIStatusBarStyle{
         return self.barStyle
     }
     

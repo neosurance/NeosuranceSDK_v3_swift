@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class NSRUser: NSObject{
+public class NSRUser: NSObject{
     
     var code: String!
     var email: String!
@@ -34,7 +34,7 @@ class NSRUser: NSObject{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initWithDict(dict: NSDictionary)->NSRUser{
+    public func initWithDict(dict: NSDictionary)->NSRUser{
         
         if(dict.object(forKey: "code") != nil) {
             self.code = (dict.object(forKey:"code") as! String)
@@ -86,7 +86,7 @@ class NSRUser: NSObject{
         
     }
     
-    func toDict(withLocals: Bool)->NSDictionary{
+    public func toDict(withLocals: Bool)->NSDictionary{
         
         let dict = NSMutableDictionary()
     

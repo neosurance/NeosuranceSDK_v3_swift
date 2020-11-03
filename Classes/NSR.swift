@@ -23,7 +23,7 @@ protocol NSRWorkflowDelegate: NSObject{
     func keepAlive()->()
 }
 
-class NSR: NSObject, CLLocationManagerDelegate{
+public class NSR: NSObject, CLLocationManagerDelegate{
 
     static var sharedInstance: NSR!
     
@@ -76,14 +76,14 @@ class NSR: NSObject, CLLocationManagerDelegate{
         fatalError("init(coder:) has not been implemented")
     }
     
-    static func getSharedInstance()->NSR{
+    public static func getSharedInstance()->NSR{
         if(NSR.sharedInstance == nil){
             NSR.sharedInstance = NSR(securityDelegate: NSRDefaultSecurityDelegate())
         }
         return NSR.sharedInstance
     }
     
-    func setup(settings:NSMutableDictionary){
+    public func setup(settings:NSMutableDictionary){
         
         print("NSR - SETUP")
         
@@ -151,7 +151,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func initJob(){
+    public func initJob(){
         
         self.stopHardTraceLocation()
         self.stopTraceLocation()
@@ -162,14 +162,14 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func continueInitJob(){
+    public func continueInitJob(){
         self.traceConnection()
         self.traceLocation()
         self.hardTraceLocation()
         //self.traceFence()
     }
     
-    func synchEventWebView()->Bool{
+    public func synchEventWebView()->Bool{
         
         let conf = getConf()
         let local_tracking_bool = getBoolean(dict: conf, key: "local_tracking")
@@ -193,7 +193,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func setConf(conf:NSDictionary){
+    public func setConf(conf:NSDictionary){
         
         
         UserDefaults.standard.set(conf, forKey: "NSR_conf")
@@ -212,7 +212,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
 
-    func getConf()->NSDictionary{
+    public func getConf()->NSDictionary{
         
         let NSR_conf = UserDefaults.standard.object(forKey: "NSR_conf")
         
@@ -238,7 +238,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func setSettings(settings: NSDictionary){
+    public func setSettings(settings: NSDictionary){
         
         
         do {
@@ -252,7 +252,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
 
-    func getSettings()->NSDictionary{
+    public func getSettings()->NSDictionary{
         
         var settings = NSMutableDictionary()
         
@@ -267,7 +267,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return settings
     }
     
-    func storeData(key: String, data: NSDictionary){
+    public func storeData(key: String, data: NSDictionary){
         
         let nsr_key = "NSR_WV_" + key
         /* UserDefaults.standard.set(data, forKey: nsr_key) */
@@ -282,7 +282,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
 
-    func retrieveData(key: String)->NSDictionary{
+    public func retrieveData(key: String)->NSDictionary{
         
         let nsr_key = "NSR_WV_" + key
         let decoded  = UserDefaults.standard.object(forKey: nsr_key) as! Data
@@ -302,13 +302,13 @@ class NSR: NSObject, CLLocationManagerDelegate{
     }
     
     
-    func resetCruncher(){
+    public func resetCruncher(){
         if(self.eventWebView != nil) {
-            self.eventWebView.reset()            
+            self.eventWebView.reset()
         }
     }
     
-    func hardTraceLocation(){
+    public func hardTraceLocation(){
         print("hardTraceLocation")
         let conf = self.getConf()
         if(conf.count > 0 && self.getBoolean(dict: conf["position"] as! NSDictionary, key: "enabled")) {
@@ -324,14 +324,14 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
 
-    func stopHardTraceLocation(){
+    public func stopHardTraceLocation(){
         if(self.hardLocationManager != nil){
             print("stopHardTraceLocation")
             self.hardLocationManager.stopUpdatingLocation()
         }
     }
     
-    func accurateLocation(meters: Double, duration:Int, extend: Bool) {
+    public func accurateLocation(meters: Double, duration:Int, extend: Bool) {
         let conf = self.getConf()
         
         if(conf.count > 0 && self.getBoolean(dict: conf["position"] as! NSDictionary, key: "enabled")) {
@@ -352,13 +352,13 @@ class NSR: NSObject, CLLocationManagerDelegate{
 
     }
     
-    func accurateLocationEnd(){
+    public func accurateLocationEnd(){
         print("accurateLocationEnd")
         self.stopHardTraceLocation()
         self.setHardTraceEnd(0)
     }
     
-    func initHardLocation(){
+    public func initHardLocation(){
         if(self.hardLocationManager == nil) {
             print("initHardLocation")
             self.hardLocationManager = CLLocationManager()
@@ -371,7 +371,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
 
-    func isHardTraceLocation()->Bool{
+    public func isHardTraceLocation()->Bool{
         
         let hte = self.getHardTraceEnd() as Int
         let date = NSDate()
@@ -379,14 +379,14 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return (hte > 0 && Int(round(date.timeIntervalSince1970)) < hte)
     }
 
-    func checkHardTraceLocation(){
+    public func checkHardTraceLocation(){
         if(!self.isHardTraceLocation()){
             self.stopHardTraceLocation()
             self.setHardTraceEnd(0)
         }
     }
 
-    func getHardTraceEnd()->Int{
+    public func getHardTraceEnd()->Int{
         
         let n = UserDefaults.standard.object(forKey: "NSR_hardTraceEnd")
         if(n != nil) {
@@ -397,11 +397,11 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
 
-    func setHardTraceEnd(_ hardTraceEnd: Int){
+    public func setHardTraceEnd(_ hardTraceEnd: Int){
         UserDefaults.standard.set(hardTraceEnd, forKey: "NSR_hardTraceEnd")
     }
 
-    func getHardTraceMeters()->Double{
+    public func getHardTraceMeters()->Double{
         let n = UserDefaults.standard.object(forKey: "NSR_hardTraceMeters")
         if(n != nil) {
             return n as! Double
@@ -410,11 +410,11 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
 
-    func setHardTraceMeters(_ meters: Double){
+    public func setHardTraceMeters(_ meters: Double){
         UserDefaults.standard.set(meters, forKey: "NSR_hardTraceMeters")
     }
     
-    func traceLocation(){
+    public func traceLocation(){
         let conf = self.getConf()
         
         let positionEnabled = self.getBoolean(dict: conf["position"] as! NSDictionary, key: "enabled")
@@ -427,7 +427,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func initLocation(){
+    public func initLocation(){
         if(self.locationManager == nil) {
             print("initLocation")
             self.locationManager = CLLocationManager()
@@ -438,7 +438,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func initStillLocation(){
+    public func initStillLocation(){
         if(self.stillLocationManager == nil) {
             print("initStillLocation")
             self.stillLocationManager = CLLocationManager()
@@ -451,14 +451,14 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func stopTraceLocation(){
+    public func stopTraceLocation(){
         print("stopTraceLocation")
         if(self.locationManager != nil){
             self.locationManager.stopMonitoringSignificantLocationChanges()
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         
         if(manager == self.stillLocationManager) {
             manager.stopUpdatingLocation()
@@ -486,15 +486,15 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("didFailWithError")
     }
     
-    func locationManager(_ manager: CLLocationManager, didFinishDeferredUpdatesWithError error: Error?) {
+    public func locationManager(_ manager: CLLocationManager, didFinishDeferredUpdatesWithError error: Error?) {
         print("didFinishDeferredUpdatesWithError")
     }
     
-    func opportunisticTrace(){
+    public func opportunisticTrace(){
         
         //self.tracePower()
         self.traceActivity()
@@ -542,22 +542,22 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func setLastLocationAuth(_ locationAuth: String?){
+    public func setLastLocationAuth(_ locationAuth: String?){
         if(locationAuth != nil){
             UserDefaults.standard.set(locationAuth, forKey: "NSR_locationAuth")
         }
     }
 
-    func getLastLocationAuth()->String?{
+    public func getLastLocationAuth()->String?{
         let NSR_locationAuth = UserDefaults.standard.object(forKey: "NSR_locationAuth") as? String ?? nil
         return NSR_locationAuth
     }
 
-    func setLastPushAuth(_ pushAuth: String) {
+    public func setLastPushAuth(_ pushAuth: String) {
         UserDefaults.standard.set(pushAuth, forKey: "NSR_pushAuth")
     }
 
-    func getLastPushAuth()->String?{
+    public func getLastPushAuth()->String?{
         let NSR_pushAuth = UserDefaults.standard.object(forKey: "NSR_pushAuth") as? String ?? nil
         return NSR_pushAuth
     }
@@ -566,7 +566,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** ACTION *** */
     
-    func sendAction(action: String, code: String, details: String){
+    public func sendAction(action: String, code: String, details: String){
         
         print("sendAction action " + action)
         print("sendAction policyCode " + code)
@@ -609,7 +609,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** EVENT *** */
     
-    func crunchEvent(event: String, payload: NSDictionary){
+    public func crunchEvent(event: String, payload: NSDictionary){
         
         if (self.getBoolean(dict: getConf(), key: "local_tracking")) {
             print("crunchEvent event " + event)
@@ -621,7 +621,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func localCrunchEvent(event: String, payload: NSDictionary){
+    public func localCrunchEvent(event: String, payload: NSDictionary){
         if(self.eventWebView == nil) {
             print("localCrunchEvent Making NSREventWebView")
             self.eventWebView = NSREventWebView()
@@ -631,7 +631,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     }
     
     
-    func sendEvent(event: String, payload: NSDictionary){
+    public func sendEvent(event: String, payload: NSDictionary){
         
         print("sendEvent event: " + event)
         print("sendEvent payload: " + self.dictToJSONString(dictionary: payload))
@@ -699,7 +699,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
                     }
                     
                 }else if(error != nil){
-                    print("sendEvent - error: ", error?.localizedFailureReason! ?? "ERROR")                    
+                    print("sendEvent - error: ", error?.localizedFailureReason! ?? "ERROR")
                 }
                 
             })
@@ -709,7 +709,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func archiveEvent(event: String, payload: NSDictionary){
+    public func archiveEvent(event: String, payload: NSDictionary){
     
         print("archiveEvent event " + event)
         print("archiveEvent payload ", payload)
@@ -761,7 +761,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     }
     
     
-    func snapshot(event: String, payload:NSDictionary)->NSMutableDictionary{
+    public func snapshot(event: String, payload:NSDictionary)->NSMutableDictionary{
         let snapshot = self.snapshot()
         snapshot.setValue(payload, forKey: event)
     
@@ -775,7 +775,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return snapshot
     }
 
-    func snapshot()->NSMutableDictionary{
+    public func snapshot()->NSMutableDictionary{
         
         var snapshot = NSMutableDictionary()
         
@@ -795,7 +795,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** USER *** */
     
-    func registerUser(user: NSRUser){
+    public func registerUser(user: NSRUser){
     
         print( "registerUser: ", user.toDict(withLocals: true) )
         UserDefaults.standard.removeObject(forKey: "NSR_auth")
@@ -834,11 +834,11 @@ class NSR: NSObject, CLLocationManagerDelegate{
                 
     }
     
-    func setUser(user: NSRUser){
+    public func setUser(user: NSRUser){
         UserDefaults.standard.set(user.toDict(withLocals: true), forKey: "NSR_user")
     }
 
-    func getUser()->NSRUser{
+    public func getUser()->NSRUser{
         
         if let userDict = UserDefaults.standard.object(forKey: "NSR_user") as? NSDictionary{
             return NSRUser().initWithDict(dict: userDict)
@@ -847,7 +847,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return NSRUser()
     }
     
-    func forgetUser(){
+    public func forgetUser(){
         
         print("forgetUser")
         
@@ -860,7 +860,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
     
-    func authorize(completionHandler: @escaping (_ authorized: Bool)->()) {
+    public func authorize(completionHandler: @escaping (_ authorized: Bool)->()) {
         
         let auth = self.getAuth()
         
@@ -931,11 +931,11 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     
     
-    func needsInitJob(conf: NSDictionary, oldConf: NSDictionary)->Bool{
+    public func needsInitJob(conf: NSDictionary, oldConf: NSDictionary)->Bool{
         return (oldConf.count == 0 || !conf.isEqual(to: oldConf as! [AnyHashable : Any]) || (eventWebView == nil && getBoolean(dict: conf, key: "local_tracking")) )
     }
 
-    func showApp(){
+    public func showApp(){
         
         let urlTmp = self.getAppUrl()
         
@@ -945,7 +945,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
 
-    func showApp(params: NSDictionary){
+    public func showApp(params: NSDictionary){
         
         let urlTmp = self.getAppUrl()
         
@@ -955,11 +955,11 @@ class NSR: NSObject, CLLocationManagerDelegate{
                 
     }
 
-    func showUrl(url: String){
+    public func showUrl(url: String){
         self.showUrl(url: url, params: nil)
     }
 
-    func showUrl(url: String, params: NSDictionary?){
+    public func showUrl(url: String, params: NSDictionary?){
         
         var urlTmp = url
         
@@ -1033,18 +1033,18 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** WEB_VIEW *** */
     
-    func registerWebView(newWebView: NSRControllerWebView){
+    public func registerWebView(newWebView: NSRControllerWebView){
         if(self.controllerWebView != nil){
             self.controllerWebView.close()
         }
         self.controllerWebView = newWebView
     }
 
-    func clearWebView(){
+    public func clearWebView(){
         controllerWebView = nil
     }
     
-    func dictToJSONString(dictionary: NSDictionary?)->String{
+    public func dictToJSONString(dictionary: NSDictionary?)->String{
         
         var dictToJSONString = ""
         
@@ -1063,7 +1063,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return dictToJSONString
     }
     
-    func topViewController(rootViewController: UIViewController)->UIViewController{
+    public func topViewController(rootViewController: UIViewController)->UIViewController{
         
         //return self.topViewController(rootViewController: UIApplication.shared.keyWindow?.rootViewController ?? UIViewController())
         
@@ -1086,7 +1086,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     }
     
     /*
-    func topViewController(rootViewController: UIViewController)->UIViewController{
+    public func topViewController(rootViewController: UIViewController)->UIViewController{
         
         if(rootViewController is UINavigationController){
             let navigationController = rootViewController as! UINavigationController
@@ -1108,7 +1108,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     */
     
     /* keys: uid, push_token, os, version, model */
-    func getDevicePayload()->NSMutableDictionary{
+    public func getDevicePayload()->NSMutableDictionary{
         
         let devicePayLoad = NSMutableDictionary()
         
@@ -1149,13 +1149,13 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     
     /* *** LOGIN *** */
-    func loginExecuted(url: String){
+    public func loginExecuted(url: String){
         let params = NSMutableDictionary()
         params.setObject("yes", forKey:"loginExecuted" as NSCopying)
         self.showUrl(url: url, params: params)
     }
 
-    func paymentExecuted(paymentInfo: NSDictionary, url: String){        
+    public func paymentExecuted(paymentInfo: NSDictionary, url: String){
         let params = NSMutableDictionary()
         params.setObject(self.dictToJson(dict: paymentInfo), forKey:"paymentExecuted" as NSCopying)
         self.showUrl(url: url, params: params)
@@ -1165,7 +1165,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** PUSHES *** */
     
-    func forwardNotification(response: UNNotificationResponse)->Bool{
+    public func forwardNotification(response: UNNotificationResponse)->Bool{
         
         let userInfo = response.notification.request.content.userInfo
         if(userInfo.count > 0 && "NSR" == userInfo["provider"] as! String) {
@@ -1178,7 +1178,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return false
     }
     
-    func showPush(pid: String, push: NSDictionary, delay: Int){
+    public func showPush(pid: String, push: NSDictionary, delay: Int){
         
         let mPush = NSMutableDictionary.init(dictionary: push)
         mPush.setObject("NSR", forKey:"provider" as NSCopying)
@@ -1203,13 +1203,13 @@ class NSR: NSObject, CLLocationManagerDelegate{
         
     }
 
-    func killPush(pid: String){
+    public func killPush(pid: String){
         if(!pid.isEmpty){
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [pid])
         }
     }
 
-    func showPush(push: NSDictionary){
+    public func showPush(push: NSDictionary){
         self.showPush(pid: "NSR", push: push, delay: 1)
     }
     
@@ -1217,7 +1217,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** CONNECTION *** */
     
-    func traceConnection(){
+    public func traceConnection(){
         
         let conf = self.getConf()
         
@@ -1291,7 +1291,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
        
     }
 
-    func stopTraceConnection(){
+    public func stopTraceConnection(){
         print("stopTraceConnection")
         
         if(NSR.nwPathMonitor != nil){
@@ -1299,11 +1299,11 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
 
-    func setLastConnection(lastConnection: String){
+    public func setLastConnection(lastConnection: String){
         UserDefaults.standard.setValue(lastConnection, forKey: "NSR_lastConnection")
     }
 
-    func getLastConnection()->String?{
+    public func getLastConnection()->String?{
         let NSR_lastConnection =  UserDefaults.standard.value(forKey: "NSR_lastConnection")
         
         if(NSR_lastConnection != nil){
@@ -1317,7 +1317,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** ACTIVITY *** */
     
-    func traceActivity(){
+    public func traceActivity(){
         
         let conf = self.getConf()
         
@@ -1346,7 +1346,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
     
-    func initActivity(){
+    public func initActivity(){
         if(self.motionActivityManager == nil){
             print("initActivity")
             self.motionActivityManager = CMMotionActivityManager()
@@ -1354,17 +1354,17 @@ class NSR: NSObject, CLLocationManagerDelegate{
         }
     }
 
-    @objc func sendActivity(){
+    @objc public func sendActivity(){
         print("sendActivity")
         self.innerSendActivity()
     }
 
-    @objc func recoveryActivity(){
+    @objc public func recoveryActivity(){
         print("recoveryActivity")
         self.innerSendActivity()
     }
     
-    func activityType(activity: CMMotionActivity)->String?{
+    public func activityType(activity: CMMotionActivity)->String?{
         if(activity.stationary) {
             return "still"
         } else if(activity.walking) {
@@ -1379,7 +1379,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return nil
     }
     
-    func activityConfidence(activity: CMMotionActivity)->Int{
+    public func activityConfidence(activity: CMMotionActivity)->Int{
         
         if(activity.confidence == CMMotionActivityConfidence.low) {
             return 25
@@ -1392,16 +1392,16 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return 0
     }
 
-    func setLastActivity(lastActivity: String){
+    public func setLastActivity(lastActivity: String){
         UserDefaults.standard.set(lastActivity, forKey: "NSR_lastActivity")
     }
 
-    func getLastActivity()->String{
+    public func getLastActivity()->String{
         let NSR_lastActivity = UserDefaults.standard.object(forKey: "NSR_lastActivity") as! String
         return NSR_lastActivity
     }
     
-    func innerSendActivity(){
+    public func innerSendActivity(){
         
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(recoveryActivity), object: nil)
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(sendActivity), object: nil)
@@ -1490,19 +1490,19 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** UTILS *** */
     
-    func logDisabled()->Bool{
+    public func logDisabled()->Bool{
         return NSR._logDisabled
     }
     
-    func version()->String{
+    public func version()->String{
         return "3.0.0"
     }
     
-    func os()->String{
+    public func os()->String{
         return "iOS"
     }
     
-    func getBoolean(dict: NSDictionary, key: String)->Bool{
+    public func getBoolean(dict: NSDictionary, key: String)->Bool{
         
         var boolTmp = false
         
@@ -1513,39 +1513,39 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return boolTmp
     }
     
-    func getLang()->String{
+    public func getLang()->String{
         return self.getSettings().object(forKey: "ns_lang") as! String
     }
     
-    func setAuth(auth: NSDictionary){
+    public func setAuth(auth: NSDictionary){
         UserDefaults.standard.set(auth, forKey: "NSR_auth")
     }
 
-    func getAuth()->NSDictionary{
+    public func getAuth()->NSDictionary{
         return UserDefaults.standard.object(forKey: "NSR_auth") as? NSDictionary ?? NSDictionary()
     }
     
-    func getToken()->String{
+    public func getToken()->String{
         let token = self.getAuth()["token"] as! String
         return token
     }
     
-    func getPushToken()->String{
+    public func getPushToken()->String{
         let push_token = (self.getSettings()["push_token"] != nil) ? self.getSettings()["push_token"] as! String : ""
         return push_token
     }
     
-    func uuid()->String{
+    public func uuid()->String{
         let uuid = UIDevice.current.identifierForVendor!.uuidString + ""
         print("uuid: " + uuid)
         return uuid
     }
     
-    func setAppUrl(appUrl: String){
+    public func setAppUrl(appUrl: String){
         UserDefaults.standard.set(appUrl, forKey: "NSR_appUrl")
     }
 
-    func getAppUrl()->String?{
+    public func getAppUrl()->String?{
         
         var NSR_appUrl: String!
         
@@ -1556,7 +1556,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
         return NSR_appUrl
     }
     
-    func dictToJson(dict: NSDictionary)->String{
+    public func dictToJson(dict: NSDictionary)->String{
         let jsonData =  (try? JSONSerialization.data(withJSONObject: dict, options: [])) ?? Data()
         let jsonDataString = String.init(data: jsonData, encoding: String.Encoding.utf8) ?? ""
         return jsonDataString
@@ -1566,7 +1566,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** FENCES *** */
     /*
-    func traceFence(){
+    public func traceFence(){
         
         let conf = self.getConf()
         
@@ -1591,7 +1591,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     
     /* *** POWER *** */
     /*
-    func tracePower(){
+    public func tracePower(){
         NSDictionary* conf = [self getConf];
         if(conf != nil && [self getBoolean:conf[@"power"] key:@"enabled"]) {
             UIDevice* currentDevice = [UIDevice currentDevice];
@@ -1614,7 +1614,7 @@ class NSR: NSObject, CLLocationManagerDelegate{
     }
     */
     
-    func getMainThreadFromBackground()->DispatchQueue{
+    public func getMainThreadFromBackground()->DispatchQueue{
         if UIApplication.shared.applicationState == .active  {
             return DispatchQueue.main
         }else{
