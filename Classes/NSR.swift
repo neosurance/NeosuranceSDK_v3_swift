@@ -12,11 +12,11 @@ import Network
 import MapKit
 import Foundation
 
-protocol NSRSecurityDelegate: NSObject{
+public protocol NSRSecurityDelegate: NSObject{
     func secureRequest( endpoint: String, payload: NSDictionary, headers: NSDictionary, completionHandler: @escaping(_ responseObject: NSDictionary, _ error: NSError?)->() )
 }
 
-protocol NSRWorkflowDelegate: NSObject{
+public protocol NSRWorkflowDelegate: NSObject{
     func executeLogin(url: String)->(Bool)
     func executePayment(payment: NSDictionary, url: String)->(NSDictionary)
     func confirmTransaction(paymentInfo: NSDictionary)->()
@@ -28,7 +28,7 @@ public class NSR: NSObject, CLLocationManagerDelegate{
     static var sharedInstance: NSR!
     
     var securityDelegate: NSRSecurityDelegate!
-    var workflowDelegate: NSRWorkflowDelegate!
+    public var workflowDelegate: NSRWorkflowDelegate!
     
     var locationManager: CLLocationManager!
     var hardLocationManager: CLLocationManager!
@@ -596,7 +596,7 @@ public class NSR: NSObject, CLLocationManagerDelegate{
                 if(error == nil){
                     print("sendAction ", responseObject);
                 }else{
-                    print("sendAction - error: ", error)
+                    print("sendAction - error: ", error ?? "")
                 }
             })
             
@@ -614,7 +614,7 @@ public class NSR: NSObject, CLLocationManagerDelegate{
         if (self.getBoolean(dict: getConf(), key: "local_tracking")) {
             print("crunchEvent event " + event)
             print("crunchEvent payload " + payload.description)
-            self.snapshot(event: event, payload:payload)
+            _ = self.snapshot(event: event, payload:payload)
             self.localCrunchEvent(event: event, payload:payload)
         }else{
             self.sendEvent(event: event, payload:payload)
@@ -751,7 +751,7 @@ public class NSR: NSObject, CLLocationManagerDelegate{
             
             self.securityDelegate.secureRequest(endpoint: "archiveEvent", payload: requestPayload, headers: headers, completionHandler: { responseObject, error in
                 if(error != nil){
-                    print("archiveEvent - error: ", error)
+                    print("archiveEvent - error: ", error ?? "")
                 }
             })
             
@@ -970,7 +970,7 @@ public class NSR: NSObject, CLLocationManagerDelegate{
             
             for (key, value) in params!{
                 
-                var keyString = key as? String ?? ""
+                let keyString = key as? String ?? ""
                 var valueString = value as? String ?? ""
                 
                 valueString = valueString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""

@@ -10,23 +10,23 @@ import UIKit
 
 public class NSRUser: NSObject{
     
-    var code: String!
-    var email: String!
-    var firstname: String!
-    var lastname: String!
-    var mobile: String!
-    var fiscalCode: String!
-    var gender: String!
-    var birthday: Date!
-    var address: String!
-    var zipCode: String!
-    var city: String!
-    var stateProvince: String!
-    var country: String!
-    var extra: NSDictionary!
-    var locals: NSDictionary!
+    public var code: String!
+    public var email: String!
+    public var firstname: String!
+    public var lastname: String!
+    public var mobile: String!
+    public var fiscalCode: String!
+    public var gender: String!
+    public var birthday: Date!
+    public var address: String!
+    public var zipCode: String!
+    public var city: String!
+    public var stateProvince: String!
+    public var country: String!
+    public var extra: NSDictionary!
+    public var locals: NSDictionary!
     
-    override init(){
+    public override init(){
         super.init()
     }
     

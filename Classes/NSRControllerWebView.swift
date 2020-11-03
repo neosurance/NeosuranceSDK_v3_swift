@@ -198,7 +198,7 @@ public class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDel
                         }else{
                             let result = NSMutableDictionary()
                             result.setObject("error", forKey: "status" as NSCopying)
-                            result.setObject(error, forKey: "message" as NSCopying)
+                            result.setObject(error ?? "", forKey: "message" as NSCopying)
                             
                             let evalMessage = nsr.dictToJson(dict: result)
                             let evalCallBack = body["callBack"] as! String
