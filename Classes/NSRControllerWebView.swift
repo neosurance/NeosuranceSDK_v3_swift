@@ -285,7 +285,7 @@ public class NSRControllerWebView: UIViewController,WKUIDelegate,WKNavigationDel
             if(nsr.workflowDelegate != nil && WHAT == "goTo"){
              
                 if let area = body["area"] as? String{
-                    nsr.workflowDelegate.goTo(area)
+                    nsr.workflowDelegate.goTo(area: area)
                 }
             }
             
